@@ -1,13 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Music Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+html,body{
+    margin:0;
+    padding:0;
+    background:transparent;
+}
+
+#music{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:#485331;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    font-size:24px;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+    animation:spin 4s linear infinite;
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+</style>
 </head>
 
-<body style="background:#485331;display:flex;justify-content:center;align-items:center;height:100vh;color:white;font-family:Arial;">
+<body>
 
-<h1>🎵</h1>
+<div id="music">🎵</div>
+
+<audio id="bgm" autoplay loop preload="auto">
+    <source src="musictheadamstimur.webm" type="audio/webm">
+</audio>
+
+<script>
+
+const bgm=document.getElementById("bgm");
+
+bgm.volume=1;
+
+function playMusic(){
+
+    bgm.play().catch(()=>{});
+
+}
+
+window.onload=playMusic;
+
+document.addEventListener("click",playMusic,{once:true});
+document.addEventListener("touchstart",playMusic,{once:true});
+
+setInterval(()=>{
+
+    if(bgm.paused){
+
+        playMusic();
+
+    }
+
+},1000);
+
+</script>
 
 </body>
 </html>
