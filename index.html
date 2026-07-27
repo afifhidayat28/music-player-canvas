@@ -4,92 +4,80 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Music Player</title>
-
 <style>
-
 html,body{
     margin:0;
     padding:0;
-    background:transparent;
     overflow:hidden;
+    background:transparent;
 }
 
-#music{
+#musicBtn{
     position:fixed;
     right:20px;
     bottom:20px;
     width:60px;
     height:60px;
     border-radius:50%;
+    border:none;
     background:#485331;
-    color:#fff;
+    color:white;
+    font-size:26px;
+    cursor:pointer;
     display:flex;
-    align-items:center;
     justify-content:center;
-    font-size:28px;
-    box-shadow:0 6px 15px rgba(0,0,0,.25);
+    align-items:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.25);
+    transition:.3s;
+}
+
+#musicBtn.playing{
     animation:spin 4s linear infinite;
-    user-select:none;
 }
 
 @keyframes spin{
-    from{
-        transform:rotate(0deg);
-    }
-    to{
-        transform:rotate(360deg);
-    }
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
 }
-
 </style>
 
 </head>
 
 <body>
 
-<div id="music">🎵</div>
+<button id="musicBtn">▶️</button>
 
-<audio id="bgm" autoplay loop preload="auto">
+<audio id="bgm" loop preload="auto">
     <source src="Timur.mp3" type="audio/mpeg">
-    Browser Anda tidak mendukung audio.
 </audio>
 
 <script>
 
-const audio = document.getElementById("bgm");
+const bgm = document.getElementById("bgm");
+const btn = document.getElementById("musicBtn");
 
-// Volume 100%
-audio.volume = 1.0;
+bgm.volume = 1;
 
-// Fungsi memutar musik
-function startMusic(){
-    audio.play().catch(() => {});
-}
+btn.addEventListener("click", async ()=>{
 
-// Coba autoplay
-window.addEventListener("load", startMusic);
+    if(bgm.paused){
 
-// Browser biasanya mengizinkan play setelah interaksi pertama
-document.addEventListener("click", startMusic, {once:true});
-document.addEventListener("touchstart", startMusic, {once:true});
+        try{
+            await bgm.play();
+            btn.innerHTML="🎵";
+            btn.classList.add("playing");
+        }catch(e){
+            alert("Browser tidak mengizinkan audio.");
+        }
 
-// Kalau browser menghentikan audio, putar lagi
-audio.addEventListener("pause", () => {
-    startMusic();
-});
+    }else{
 
-// Kalau selesai (jaga-jaga), ulang dari awal
-audio.addEventListener("ended", () => {
-    audio.currentTime = 0;
-    startMusic();
-});
+        bgm.pause();
+        btn.innerHTML="▶️";
+        btn.classList.remove("playing");
 
-// Saat kembali ke tab ini
-document.addEventListener("visibilitychange", () => {
-    if(!document.hidden){
-        startMusic();
     }
+
 });
 
 </script>
